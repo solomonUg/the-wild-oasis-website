@@ -1,13 +1,11 @@
-import { Suspense } from "react";
-import CabinList from "../_components/CabinList";
-import Spinner from "../_components/Spinner";
-import SpinnerMini from "../_components/SpinnerMini";
+import CabinCard from "@/app/_components/CabinCard";
 
 export default function Page() {
+  // CHANGE
+  const cabins = [];
 
   return (
-    <div className="flex items-center justify-center w-full mt-16">
-    <div className="w-[95%] ">
+    <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
         Our Luxury Cabins
       </h1>
@@ -20,10 +18,13 @@ export default function Page() {
         to paradise.
       </p>
 
-      <Suspense  fallback={<SpinnerMini/>}>
-        <CabinList/>
-      </Suspense>
-    </div>
+      {cabins.length > 0 && (
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 xl:gap-14">
+          {cabins.map((cabin) => (
+            <CabinCard cabin={cabin} key={cabin.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
