@@ -1,8 +1,11 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import SpinnerMini from "../_components/SpinnerMini";
+import Link from "next/link";
+import FilterCabins from "../_components/FilterCabins";
 
-export const revalidate = 3600;
+// no longer necessary as page is now dynamic after adding the searchParam to filter
+// export const revalidate = 3600;
 // export const revalidate = 0;
 
 export const metadata = {
@@ -10,7 +13,12 @@ export const metadata = {
 }
 
 
-export default function Page() {
+export default async function Page({searchParams}) {
+
+  const resolvedSearchParams = await Promise.resolve(searchParams)
+
+  const filter = resolvedSearchParams?.capacity??"all";
+
 
   return (
     <div className="flex items-center justify-center w-full mt-16">
@@ -26,9 +34,11 @@ export default function Page() {
         away from home. The perfect spot for a peaceful, calm vacation. Welcome
         to paradise.
       </p>
-
-      <Suspense  fallback={<SpinnerMini/>}>
-        <CabinList/>
+      <div className="flex justify-end">
+        <FilterCabins filter={filter}/> 
+      </div>
+      <Suspense  fallback={<SpinnerMini/>} key={filter}>
+        <CabinList filter={filter}/>
       </Suspense>
     </div>
     </div>
