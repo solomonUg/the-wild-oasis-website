@@ -1,3 +1,4 @@
+import { ReservationProvider } from "./_components/context/ReservationContext";
 import Logo from "./_components/Logo";
 import Navigation from "./_components/Navigation";
 import "./globals.css";
@@ -17,7 +18,11 @@ export default function RootLayout({ children }) {
           <Logo/>
           <Navigation/>
         </header>
-          <main >{children}</main>
+          <main >
+          <ReservationProvider>
+            {children}
+          </ReservationProvider>
+          </main>
       </body>
     </html>
   );

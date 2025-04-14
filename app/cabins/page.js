@@ -3,6 +3,7 @@ import CabinList from "../_components/CabinList";
 import SpinnerMini from "../_components/SpinnerMini";
 import Link from "next/link";
 import FilterCabins from "../_components/FilterCabins";
+import ReservationReminder from "../_components/ReservationReminder";
 
 // no longer necessary as page is now dynamic after adding the searchParam to filter
 // export const revalidate = 3600;
@@ -39,6 +40,7 @@ export default async function Page({searchParams}) {
       </div>
       <Suspense  fallback={<SpinnerMini/>} key={filter}>
         <CabinList filter={filter}/>
+        <ReservationReminder/>
       </Suspense>
     </div>
     </div>
