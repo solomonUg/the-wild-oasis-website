@@ -1,12 +1,21 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google"
-
+import Google from "next-auth/providers/google";
 
 const authConfig = {
-    providers: [
-        Google({clientId: process.env.AUTH_GOOGLE_ID , clientSecret:process.env.AUTH_GOOGLE_SECRET })
-    ]
-}
+  providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
+  ],
+  callbacks: { authorized({auth, request}){
+        // This is a trick to convert a result to boolean. Also same as {auth?.user: true : false} 
+        return !!auth?.user;
+  }
+ }
+};
 
-
-export const {auth, handlers: {GET, POST}} = NextAuth(authConfig);
+export const {
+  auth,
+  handlers: { GET, POST },
+} = NextAuth(authConfig);
