@@ -12,10 +12,17 @@ const authConfig = {
         // This is a trick to convert a result to boolean. Also same as {auth?.user: true : false} 
         return !!auth?.user;
   }
+ },
+
+pages: {
+    signIn: "/login",
  }
+
 };
 
 export const {
   auth,
+  signIn,
+  signOut,
   handlers: { GET, POST },
 } = NextAuth(authConfig);
