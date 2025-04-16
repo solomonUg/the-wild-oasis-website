@@ -27,7 +27,6 @@ const {range, setRange, resetRange} = useContext(ReservationContext);
 
   // SETTINGS
   const {minBookingLength, maxBookingLength} = settings
-console.log(range)
 
   return (
     <div className="flex flex-col justify-between">
