@@ -11,11 +11,7 @@ export default async function Page() {
 
   const session = await auth();
 
-  console.log(session)
-
   const bookings = await getBookings(session.user.guestId)
-
-  console.log("booking...", bookings)
 
   return (
     <div>
