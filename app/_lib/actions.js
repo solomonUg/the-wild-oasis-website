@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import { supabase } from "./supabaseClient";
 import { getBookings } from "./data-service";
+import { redirect } from "next/navigation";
 
 export async function updateProfile(formData) {
   const session = await auth();
@@ -29,11 +30,12 @@ export async function deleteReservation(bookingId) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
 
-  const guestBookings =  await getBookings(session.user.guestId);
- 
-  const guestBookingIds = guestBookings.map((booking)=>booking.id);
+  const guestBookings = await getBookings(session.user.guestId);
 
-  if(!guestBookingIds.includes(bookingId)) throw new Error("You are noy allowed to delete this cabin");
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+
+  if (!guestBookingIds.includes(bookingId))
+    throw new Error("You are not allowed to delete this cabin");
 
   const { error } = await supabase
     .from("bookings")
@@ -43,6 +45,48 @@ export async function deleteReservation(bookingId) {
   if (error) throw new Error("Booking could not be deleted");
 
   revalidatePath("/account/reservations");
+}
+
+export async function updateReservation(formData) {
+  // carrying out Authentication
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  //Getting the data out of the formData
+  const numGuests = Number(formData.get("numGuests"));
+  const observations = formData.get("observations");
+  const reservationId = Number(formData.get("reservationId"));
+
+  // Validate observations length (max 200 chars)
+  if (observations && observations.length > 200) {
+    throw new Error("Observations must not exceed 250 characters.");
+  }
+
+  //Carrying out authorization
+  const guestBookings = await getBookings(session.user.guestId);
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+
+  if (!guestBookingIds.includes(reservationId)) {
+    throw new Error("You are not allowed to update this cabin");
+  }
+
+  //updating the data in the database
+  const updateData = { numGuests, observations };
+  const { error } = await supabase
+    .from("bookings")
+    .update(updateData)
+    .eq("id", reservationId)
+    .select()
+    .single();
+
+  //error handling
+  if (error) throw new Error("Reservation could not be updated");
+
+  //revalidating
+  revalidatePath(`/account/reservations/edit/${reservationId}`);
+
+  //redirecting
+  redirect("/account/reservations");
 }
 
 export async function signInAction() {
