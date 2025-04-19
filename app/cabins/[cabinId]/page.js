@@ -6,8 +6,8 @@ import { getCabin, getCabins } from "@/app/_lib/data-service";
 import { Suspense } from "react";
 
 export async function generateMetadata({params}) {
-  const resolvedParams = await Promise.resolve(params);
-  const cabinData = await getCabin(resolvedParams.cabinId);
+  const {cabinId} = await params;
+  const cabinData = await getCabin(cabinId);
   const {name} = cabinData;
   return {title: `Cabin ${name}`}
 }
