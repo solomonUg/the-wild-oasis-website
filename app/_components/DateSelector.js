@@ -1,6 +1,11 @@
-"use client"
+"use client";
 
-import { differenceInDays, isPast, isSameDay, isWithinInterval } from "date-fns";
+import {
+  differenceInDays,
+  isPast,
+  isSameDay,
+  isWithinInterval,
+} from "date-fns";
 import { useContext, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -16,18 +21,18 @@ function isAlreadyBooked(range, datesArr) {
   );
 }
 
-function DateSelector({settings, cabin, bookedDates}) {
+function DateSelector({ settings, cabin, bookedDates }) {
+  const { range, setRange, resetRange } = useContext(ReservationContext);
+  const displayRange = isAlreadyBooked(range, bookedDates) ? {} : range;
 
-const {range, setRange, resetRange} = useContext(ReservationContext);
-const displayRange = isAlreadyBooked(range, bookedDates)? {} : range;
+  const { minBookingLength, maxBookingLength } = settings;
+  const { regularPrice, discount } = cabin;
 
-  const {minBookingLength, maxBookingLength} = settings;
-  const {regularPrice, discount} = cabin;
-
-   const numNights = displayRange.from && displayRange.to ? differenceInDays(displayRange.to, displayRange.from) : 0;
-  const cabinPrice = numNights > 0 ? (numNights * regularPrice) - discount : 0;
-
-
+  const numNights =
+    displayRange.from && displayRange.to
+      ? differenceInDays(displayRange.to, displayRange.from)
+      : 0;
+  const cabinPrice = numNights > 0 ? numNights * regularPrice - discount : 0;
 
   return (
     <div className="flex flex-col justify-between">
@@ -43,8 +48,10 @@ const displayRange = isAlreadyBooked(range, bookedDates)? {} : range;
         toYear={new Date().getFullYear() + 5}
         captionLayout="dropdown"
         numberOfMonths={2}
-        disabled={(curDate)=>isPast(curDate) || bookedDates.some((date)=>isSameDay(date, curDate))}
-       
+        disabled={(curDate) =>
+          isPast(curDate) ||
+          bookedDates.some((date) => isSameDay(date, curDate))
+        }
       />
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">

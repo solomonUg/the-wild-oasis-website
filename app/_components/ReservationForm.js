@@ -1,6 +1,25 @@
+"use client"
+import { useContext } from "react";
+import { ReservationContext } from "./context/ReservationContext";
+import { differenceInDays } from "date-fns";
+import { createReservation } from "../_lib/actions";
+import SubmitButton from "./SubmitButton";
+
 function ReservationForm({cabin, user}) {
-  // CHANGE
-  const {maxCapacity} = cabin;
+
+  const {maxCapacity, regularPrice: cabinPrice, discount, id: cabinId} = cabin;
+
+  const { range, resetRange } = useContext(ReservationContext);
+  const { from, to } = range;
+  const numNights = differenceInDays(to, from);
+  const totalPrice = numNights * cabinPrice - discount;
+
+  const bookingData = {startDate: from, endDate : to, numNights, cabinPrice, totalPrice, cabinId };
+  console.log("cabin id..", cabinId)
+
+  const createReservationWithData = createReservation.bind(null, bookingData);
+
+
 
   return (
     <div className='scale-[1.01]'>
@@ -19,7 +38,7 @@ function ReservationForm({cabin, user}) {
         </div>
       </div>
 
-      <form className='bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col'>
+      <form className='bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col' action={async (formData)=> {await createReservationWithData(formData); resetRange()}}>
         <div className='space-y-2'>
           <label htmlFor='numGuests'>How many guests?</label>
           <select
@@ -46,17 +65,16 @@ function ReservationForm({cabin, user}) {
           <textarea
             name='observations'
             id='observations'
+            maxLength={300}
             className='px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm'
             placeholder='Any pets, allergies, special requirements, etc.?'
           />
         </div>
 
         <div className='flex justify-end items-center gap-6'>
-          <p className='text-primary-300 text-base'>Start by selecting dates</p>
-
-          <button className='bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300'>
-            Reserve now
-          </button>
+          
+          { !(from && to ) ? <p className='text-primary-300 text-base'>Start by selecting dates</p> :
+          <SubmitButton pendingLabel={"Reserving..."}>Reserve now</SubmitButton>}
         </div>
       </form>
     </div>
