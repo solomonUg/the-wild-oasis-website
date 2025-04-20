@@ -10,6 +10,7 @@ export const formatDistanceFromNow = (dateStr) =>
   }).replace('about ', '');
 
 function ReservationCard({ booking, onDelete }) {
+
   const {
     id,
     guestId,
@@ -22,6 +23,7 @@ function ReservationCard({ booking, onDelete }) {
     created_at,
     cabins: { name, image },
   } = booking;
+
 
   
 
