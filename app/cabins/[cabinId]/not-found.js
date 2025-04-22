@@ -4,7 +4,7 @@ function NotFound() {
   return (
     <main className='text-center space-y-6 mt-4'>
       <h1 className='text-3xl font-semibold'>
-        This Cabin could not be found :(
+        This Cabin could not be found 😞
       </h1>
       <Link
         href='/cabins'
