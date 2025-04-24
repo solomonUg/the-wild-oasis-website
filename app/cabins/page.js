@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import SpinnerMini from "../_components/SpinnerMini";
-import Link from "next/link";
-import FilterCabins from "../_components/FilterCabins";
 import ReservationReminder from "../_components/ReservationReminder";
+import FilterCabins from "../_components/FilterCabins";
 
 // no longer necessary as page is now dynamic after adding the searchParam to filter
 // export const revalidate = 3600;
