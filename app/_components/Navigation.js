@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { auth } from "../_lib/auth";
+import Drawer from "./Drawer";
 
 export default async function Navigation() {
   const session = await auth();
- 
+
   return (
-    <nav className="hidden sm:flex z-10 text-xl items-center justify-center">
-      <ul className="flex gap-16 ">
+    <nav className="flex z-10 text-sm md:text-xl items-center justify-center">
+      <ul className="hidden md:flex gap-16 ">
         <li className="hover:text-accent-400 transition-colors">
           <Link href={"/"}>Home</Link>
         </li>
@@ -35,6 +36,7 @@ export default async function Navigation() {
           </li>
         )}
       </ul>
+      <Drawer />
     </nav>
   );
 }
