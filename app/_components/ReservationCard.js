@@ -29,7 +29,7 @@ function ReservationCard({ booking, onDelete }) {
 
   return (
     <div className='flex border border-primary-800'>
-      <div className='relative h-32 aspect-square'>
+      <div className=' hidden md:block relative h-32 aspect-square'>
         <Image
           src={image}
           alt={`Cabin ${name}`}
@@ -38,7 +38,7 @@ function ReservationCard({ booking, onDelete }) {
         />
       </div>
 
-      <div className='flex-grow px-6 py-3 flex flex-col'>
+      <div className='flex-grow px-2 md:px-6 py-3 flex flex-col'>
         <div className='flex items-center justify-between'>
           <h3 className='text-normal md:text-xl font-semibold'>
             {numNights} nights in Cabin {name}
